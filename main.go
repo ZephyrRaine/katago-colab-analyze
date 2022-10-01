@@ -159,7 +159,7 @@ func main() {
 	session.Stderr = os.Stderr
 	session.Stdin = os.Stdin
 
-	cmd := fmt.Sprintf("%s gtp -model %s -config %s", KataGoBin, KataGoWeightFile, configFile)
+	cmd := fmt.Sprintf("%s analysis -model %s -config %s", KataGoBin, KataGoWeightFile, configFile)
 	log.Printf("DEBUG running commad:%s\n", cmd)
 	session.Run(cmd)
 }
