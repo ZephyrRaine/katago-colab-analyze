@@ -70,7 +70,7 @@ func main() {
 	//log.Printf("ssh options\n%s", response)
 	sshoptions := SSHOptions{}
 	dat, err := os.ReadFile(fileId)
-    	cif err != nil {
+    	if err != nil {
 		log.Printf("ERROR failed reading file: %s\n", fileId)
 		return
 	}
