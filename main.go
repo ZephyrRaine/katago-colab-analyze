@@ -31,45 +31,6 @@ func CreateError(status int, key string) error {
 	return &HttpError{StatusCode: status, Msg: key, Key: key}
 }
 
-// DoHTTPRequest Sends generic http request
-func DoHTTPRequest(method string, url string, headers map[string]string, body []byte) (responseBody string, err error) {
-	httpClient := &http.Client{}
-	req, _ := http.NewRequest(method, url, bytes.NewBuffer(body))
-	req.Close = true
-	if headers != nil {
-		for k, v := range headers {
-			req.Header.Set(k, v)
-		}
-	}
-
-	command, _ := http2curl.GetCurlCommand(req)
-
-	response, err := httpClient.Do(req)
-	if err != nil {
-		log.Printf("ERROR error requesting with http: %s, error: %v\n", command, err)
-		err = CreateError(500, "failed_do_get")
-		return
-	}
-	bodyBytes, err := ioutil.ReadAll(response.Body)
-	response.Body.Close()
-
-	if err != nil {
-		log.Printf("ERROR error requesting with http: %s, error: %v\n", command, err)
-		err = CreateError(500, "failed_read_body")
-		return
-	}
-
-	responseBody = string(bodyBytes)
-
-	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		log.Printf("ERROR error requesting with http: %s, status code: %v, response: %s\n", command, response.StatusCode, responseBody)
-		err = CreateError(500, "invalid_status")
-		return
-	}
-
-	return
-}
-
 type SSHOptions struct {
 	Host string `json:"host"`
 	Port int    `json:"port"`
@@ -90,7 +51,7 @@ const (
 func main() {
 	args := os.Args[1:]
 	if len(args) < 2 {
-		log.Printf("ERROR usage: colab-katago SSH_INFO_GOOGLE_DRIVE_FILE_ID USER_PASSWORD")
+		log.Printf("ERROR usage: colab-katago SSH_INFO_FILE_PATH USER_PASSWORD")
 		return
 	}
 	fileId := args[0]
@@ -100,18 +61,21 @@ func main() {
 		newConfig = &args[2]
 	}
 	log.Printf("INFO using file ID: %s password: %s\n", fileId, userpassword)
-	sshJSONURL := "https://drive.google.com/uc?id=" + fileId
-	response, err := DoHTTPRequest("GET", sshJSONURL, nil, nil)
-	if err != nil {
+	//sshJSONURL := "https://drive.google.com/uc?id=" + fileId
+	//response, err := DoHTTPRequest("GET", sshJSONURL, nil, nil)
+	/*if err != nil {
 		log.Printf("ERROR error requestting url: %s, err: %+v\n", sshJSONURL, err)
 		return
-	}
-	log.Printf("ssh options\n%s", response)
+	}*/
+	//log.Printf("ssh options\n%s", response)
 	sshoptions := SSHOptions{}
+	dat, err := os.ReadFile(fileId)
+    	check(err)
+    	log.Printf(string(dat))
 	// parse json
-	err = json.Unmarshal([]byte(response), &sshoptions)
+	err = json.Unmarshal([]byte(string(dat)), &sshoptions)
 	if err != nil {
-		log.Printf("ERROR failed parsing json: %s\n", response)
+		log.Printf("ERROR failed parsing json: %s\n", string(dat))
 		return
 	}
 
