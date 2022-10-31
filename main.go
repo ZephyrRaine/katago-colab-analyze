@@ -70,7 +70,10 @@ func main() {
 	//log.Printf("ssh options\n%s", response)
 	sshoptions := SSHOptions{}
 	dat, err := os.ReadFile(fileId)
-    	check(err)
+    	cif err != nil {
+		log.Printf("ERROR failed reading file: %s\n", fileId)
+		return
+	}
     	log.Printf(string(dat))
 	// parse json
 	err = json.Unmarshal([]byte(string(dat)), &sshoptions)
