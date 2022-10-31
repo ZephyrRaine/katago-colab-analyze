@@ -1,17 +1,13 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 	"time"
 
 	"golang.org/x/crypto/ssh"
-	"moul.io/http2curl"
 )
 
 type HttpError struct {
