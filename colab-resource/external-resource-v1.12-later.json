@@ -1,0 +1,8 @@
+{
+    "katago": {
+        "bin": "https://github.com/mildinvestor/katago-colab/releases/download/v1.12.4-alpha/katago.zip",
+        "libzip": "libzip5",
+        "weight": "https://media.katagotraining.org/uploaded/networks/models/kata1/kata1-b18c384nbt-uec.bin.gz"
+    },
+    "ngrok": "https://github.com/mildinvestor/katago-colab/releases/download/v1.12.4-alpha/ngrok"
+}
